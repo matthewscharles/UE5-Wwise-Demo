@@ -1,13 +1,18 @@
 # Wwise / UE5 Demo Project: "Blocks"
 
 **Charles Matthews 2025**
-This is a draft for a dev log video / post detailing a UE5 project.
+
+[matthewscharles.github.io/](http://matthewscharles.github.io/)
+
+## Introduction
+
+This is a draft for a dev log video / post describing audio implementation and Blueprint functionality for a project created in [Unreal Engine](https://www.unrealengine.com/) and [Wwise](https://www.audiokinetic.com/).
 
 The project features an unofficial, non-commercial clone of Tetris, created solely for educational and demonstration purposes. It is intended as a vehicle for showcasing interactive audio implementation techniques and does not replicate or redistribute original assets, code, or proprietary content from the original game.
 
 All trademarks and copyrights remain the property of their respective owners. If you are a rights holder and believe this content infringes on your intellectual property, please contact me and it will be promptly removed.
 
-## Demo Video
+### Demo Video
 
 The following video shows gameplay with timestamps for musical levels and transitions:
 
@@ -17,7 +22,7 @@ The following video shows gameplay with timestamps for musical levels and transi
 
 Please see the inline screenshots for Blueprint examples (click for full-size images).
 
-## Introduction
+## Overview
 
 The idea was to create a game that would be playable from start to finish, with some clear parameters for progression and tension as a vehicle for sound effects and interactive music. Having cloned an existing game to work through the structure, the next iteration should be a playable standalone with original logic suitable for upload on itch.io. 
 
