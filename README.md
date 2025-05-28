@@ -1,8 +1,6 @@
-# Wwise / UE5 Demo Project: "Blocks"
-
 **Charles Matthews 2025**
 
-[matthewscharles.github.io/](http://matthewscharles.github.io/)
+[matthewscharles.github.io](http://matthewscharles.github.io/)
 
 ## Introduction
 
