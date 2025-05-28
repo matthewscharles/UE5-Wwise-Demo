@@ -23,18 +23,22 @@ Please see the inline screenshots for Blueprint examples (click for full-size im
 
 ## Overview
 
-The idea was to create a game that would be playable from start to finish, with some clear parameters for progression and tension as a vehicle for sound effects and interactive music. Having cloned an existing game to work through the structure, the next iteration should be a playable standalone with original logic suitable for upload on itch.io. 
+The idea was to create a game that would be playable from start to finish, with some clear parameters for progression and tension as a vehicle for sound effects and interactive music. A puzzle game felt like the best option for something self contained, and also provided the opportunity to explore mechanics outside the usual 3D oriented worlds I have worked on in previous projects and demos.
 
-The project started from a YouTube tutorial ([@BuildGamesWithJon](https://www.youtube.com/watch?v=54L7Un47Pbs)) with heavy modifications; all original blueprints have now been replaced. 
+Having cloned an existing game to work through the structure, the next iteration should be a playable standalone with original logic suitable for upload on itch.io. 
 
-**Key modifications and features:**\- Game logic and globally accessible variables decoupled from the block blueprint and moved to the Player Controller, Game Mode, and Game Instance singletons
+I started from a YouTube tutorial ([@BuildGamesWithJon](https://www.youtube.com/watch?v=54L7Un47Pbs)) and immediately applied some heavy modifications; at this point, all original blueprints have now been replaced. 
+
+### **Key features**
+
+- Game logic and globally accessible variables decoupled from the "block" blueprint, and moved to the Player Controller, Game Mode, and Game Instance singletons
 
 - Hard-coded block configurations and colours replaced with structs
-- Moved from trigger boxes to a 1D array-based grid
-- Added scoring system and audiovisual feedback for progression
-- Added Widgets for pause, options, and music, including gamepad controls with audio feedback
-- Added an audio manager based on Data Tables – minimum inline references to assets
-- Added a music system to mix between tracks – currently four simultaneous stems
+- Moved from trigger boxes to a grid stored in a 1D array
+- Added a scoring system and audio/visual feedback for events and progression through the levels
+- Incorporated Widgets for pause, options, and music, including gamepad controls with audio feedback
+- Added an audio manager based on Data Tables, allowing minimum inline references to assets
+- Integrated a music system to mix between tracks – currently four simultaneous stems
 
 ## Wwise Hierarchy
 
@@ -58,7 +62,8 @@ At present, the player can switch tracks by pressing the track skip buttons foun
 Initial tests with the profiler indicated that dynamically loading the music tracks reduced memory, but also produced performance issues including music and SFX dropouts. 
 
 As a temporary measure, the music SoundBanks are currently loaded into memory by default in this version, with memory use at around 200MB at runtime – fine for a proof of concept in a music-oriented game, but not acceptable for production.
-Since the player can enter the music at different level states, it is not possibly simply to stream the first section of the music, and streaming all stems may cause further performance issues.
+
+Since the player can enter the music at different level states, it is not possible just to stream the first section of the music; streaming all stems may cause further performance issues.
 
 I am currently working on a solution to load the music tracks dynamically. 
 
