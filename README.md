@@ -86,23 +86,6 @@ The project currently uses the default 256 concurrent voices.
 
 Priorities are set for consistency on the central rhythmic "falling" sound and game events. Minor details such as individually spatialised sounds for the destruction of blocks are set to low priority, and limited to ten simultaneous instances.
 
-## SoundBanks and Memory Management
-
-The player can switch tracks by pressing the track skip buttons found on the pause screen; the music will enter at the current level state. 
-
-Auto-generated SoundBanks are not appropriate due to the size of concurrently loaded clips in the interactive music hierarchy. Initial tests with the profiler indicated that dynamically loading the music tracks reduced memory, but also produced performance issues including music and SFX dropouts. 
-
-As a temporary measure, the music SoundBanks are currently loaded into memory by default, with memory use at around 200MB at runtime. This is fine for a proof of concept in a music-oriented game, but would generally not be acceptable for production.
-
-I am currently working on loading the music tracks dynamically. 
-
-**Potential solutions:**
-
-- Streaming all stems by default (requires testing, not viable for mobile)
-- Streaming a lead-in clip on the transition **none->any** to allow time for the main tracks to buffer
-- Separating the first portion of each section into a shorter streamable segment
-- Loading or partially loading the "previous" and "next" Soundbanks when the player approaches the boundary (in this case, opening the music settings).
-
 ## Audio Manager
 
 Although Wwise events and UE Sounds are typically called directly from Blueprints by default, this approach spreads asset references across the game. Although not always appropriate, a globally accessible audio manager reduces the number of places that an audio designer needs to work on, ultimately helping stability in debugging situations and overall scaleability.
@@ -160,6 +143,23 @@ To handle this potentially complex setup in UE, arrays of Wwise States are store
 [![Blueprint function: set Wwise States from Data Tables](AD_4nXfefOyANW9CQz8kHBMgbBBMpghMu7IK9a6FFS7cWjq-WHZIhURkO4a06UyHqemh_Mhwmtsf6EK2BWtUAEWGRzljQf7MduOHAMiJKKgv9cRvjo2LmKmEB21gb1i56_kd3tG4nWqDoQ.png)](AD_4nXfefOyANW9CQz8kHBMgbBBMpghMu7IK9a6FFS7cWjq-WHZIhURkO4a06UyHqemh_Mhwmtsf6EK2BWtUAEWGRzljQf7MduOHAMiJKKgv9cRvjo2LmKmEB21gb1i56_kd3tG4nWqDoQ.png)
 
 This setup offers potential for selectively triggering layers – for example, enabling simplified transitions by only triggering the events associated with the main music switch.
+
+## SoundBanks and Memory Management
+
+The player can switch tracks by pressing the *track skip* buttons found on the pause screen; the music enters immediately at the current level state. 
+
+Auto-generated SoundBanks are not appropriate due to the size of concurrently loaded clips in the interactive music hierarchy. Initial tests with the profiler indicated that dynamically loading the music tracks reduced memory, but also produced performance issues including music and SFX dropouts. 
+
+As a temporary measure, the music SoundBanks are currently loaded into memory by default, with memory use at around 200MB at runtime. This is fine for a proof of concept in a music-oriented game, but would generally not be acceptable for production.
+
+I am currently working on loading the music tracks dynamically. 
+
+**Potential solutions:**
+
+- Streaming all stems by default (requires testing, not viable for mobile)
+- Streaming a lead-in clip on the transition **none->any** to allow time for the main tracks to buffer
+- Separating the first portion of each section into a shorter streamable segment
+- Loading or partially loading the "previous" and "next" Soundbanks when the player approaches the boundary (in this case, opening the music settings).
 
 ## Conclusion
 
