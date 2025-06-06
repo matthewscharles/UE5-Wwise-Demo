@@ -56,14 +56,16 @@ I started from a YouTube tutorial ([@BuildGamesWithJon](https://www.youtube.com/
 ## Wwise Hierarchy
 
 Although the game exists on a single map without world partitioning, different SoundBanks can be loaded by the player through the pause and option screens.
-
+<details>
+<summary>Show Wwise hierarchy screenshots</summary>
 [![Wwise Hierarchy: SoundBanks and Events](AD_4nXcrTr4ETEcWU3XRkanGW0rTZ0O9N60YWHch1-TUuWNz3XeQTUpVvJ9gNLNutKAH6pPV_CGeY1rtnCHoHUCTwdpmwlJqSkbLw5TeO5eGTA1qHutLv9wD-CDrOOOfSP0cTnwTLL1d9w.png)](AD_4nXcrTr4ETEcWU3XRkanGW0rTZ0O9N60YWHch1-TUuWNz3XeQTUpVvJ9gNLNutKAH6pPV_CGeY1rtnCHoHUCTwdpmwlJqSkbLw5TeO5eGTA1qHutLv9wD-CDrOOOfSP0cTnwTLL1d9w.png)
 
 [![Wwise Hierarchy: Bus Structure and Interactive Music Hierarchies](AD_4nXf1CTVFVuJTETv1ie_HKR0gFqGeifEJOZTabwlNezobXJLZ4Sx5FqwDT-NaKFMarKx3gs7yl-7Wsy-5Kb3lVVFoOA3zMF8UlriXv6ATG2OlmumpqfuAWDAMb1oQneMrJ5xuW0hKjw.png)](AD_4nXf1CTVFVuJTETv1ie_HKR0gFqGeifEJOZTabwlNezobXJLZ4Sx5FqwDT-NaKFMarKx3gs7yl-7Wsy-5Kb3lVVFoOA3zMF8UlriXv6ATG2OlmumpqfuAWDAMb1oQneMrJ5xuW0hKjw.png)
 
 [![Wwise Hierarchy: Game Syncs and Actor-Mixer SFX Banks](AD_4nXd3Gg7YFmsZ3Ie_NN03VL1e2wTnbpy9J3sb7_MKB6SepaR2J1lhk-l3RCxXmBJEwLbrgpDYIyqBrdcpPu0WqdWdpC9Ezz_7FxQvDYDa_2mCm2DyDhW4yzQgt04GLhmg_v41LliG.png)](AD_4nXd3Gg7YFmsZ3Ie_NN03VL1e2wTnbpy9J3sb7_MKB6SepaR2J1lhk-l3RCxXmBJEwLbrgpDYIyqBrdcpPu0WqdWdpC9Ezz_7FxQvDYDa_2mCm2DyDhW4yzQgt04GLhmg_v41LliG.png)
+</details>
 
-The current Windows version of the project uses the default 256 concurrent voices. 
+The project currently uses the default 256 concurrent voices. 
 
 Priorities are set for consistency on the central rhythmic "falling" sound and game events. Minor details such as individually spatialised sounds for the destruction of blocks are set to low priority, and limited to ten simultaneous instances.
 
@@ -81,7 +83,7 @@ Since the player can enter the music at different level states, it is not possib
 
 I am currently working on loading the music tracks dynamically. 
 
-Potential solutions:
+**Potential solutions:**
 
 - Streaming all stems by default (requires testing, not viable for mobile)
 - Streaming a lead-in clip on the transition **none->any** to allow time for the main tracks to buffer
@@ -103,6 +105,8 @@ The Game Mode exposes a Trigger Sound function, which determines what kind of ev
 This also provides the opportunity to switch dynamically between Wwise and UE's built-in audio system – the two approaches can also be combined using the Audio Link system so that any built-in UE sources can be summed through a Wwise mix bus.
 
 [![Blueprint function: Trigger Sound](AD_4nXdSEnypKbounsnGQVbj3Hrb_5V2y2OUa2wyP2pWU823MJ443HkM8bWcH6b8wTJig_JYqTkeqZ4utdmXvwdt8wPqQ7aCt3T-0iTYo8mT8gMfqyQt2d0aH7dcDNuilkHEAbnJyo8b_w.png)](AD_4nXdSEnypKbounsnGQVbj3Hrb_5V2y2OUa2wyP2pWU823MJ443HkM8bWcH6b8wTJig_JYqTkeqZ4utdmXvwdt8wPqQ7aCt3T-0iTYo8mT8gMfqyQt2d0aH7dcDNuilkHEAbnJyo8b_w.png)
+
+[Trigger Sound on BlueprintUE.com](https://blueprintue.com/blueprint/j7hemlh-/)
 
 The following Blueprint functions show example calls to Trigger Sound, with and without spatialisation:
 [![Blueprint function: Pause Game](AD_4nXcUx5bob9YT7W1ZLfdNpAUkSAP86cE09AFK1y_gnBJSuqN0W57iXhG40HqCWmt6Jby7ZSR8plTH_e7yC3fAyEnkRV0NsT49keKBAlC95k3OPuaR8jntXbERBo5wFHtFCJDB92bv.png)](AD_4nXcUx5bob9YT7W1ZLfdNpAUkSAP86cE09AFK1y_gnBJSuqN0W57iXhG40HqCWmt6Jby7ZSR8plTH_e7yC3fAyEnkRV0NsT49keKBAlC95k3OPuaR8jntXbERBo5wFHtFCJDB92bv.png)
