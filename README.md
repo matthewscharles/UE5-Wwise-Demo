@@ -1,17 +1,18 @@
-**Charles Matthews 2025**
-
-[matthewscharles.github.io](http://matthewscharles.github.io/)
+**Charles Matthews 2025** | [matthewscharles.github.io](http://matthewscharles.github.io/)
 
 ## Table of Contents
 
 - [Introduction](#introduction)
   - [Demo Video](#demo-video)
+
 - [Overview](#overview)
   - [Key features](#key-features)
+
 - [Wwise Hierarchy](#wwise-hierarchy)
-- [Memory and loading SoundBanks](#memory-and-loading-soundbanks)
+- [Loading SoundBanks and Memory Management](#memory-and-loading-soundbanks)
 - [Audio Manager Blueprint](#audio-manager-blueprint)
 - [Mix](#mix)
+
 - [Conclusion](#conclusion)
   - [Next steps](#next-steps)
 
@@ -25,7 +26,7 @@ All trademarks and copyrights remain the property of their respective owners. If
 
 ### Demo Video
 
-The following video shows gameplay with timestamps for musical levels and transitions:
+The following video shows gameplay with YouTube timestamps for musical levels and transitions:
 
 [Wwise Adaptive Music System: Blocks Demo](https://www.youtube.com/watch?v=Cw2E2UDpvCo)
 
@@ -45,12 +46,11 @@ I started from a YouTube tutorial ([@BuildGamesWithJon](https://www.youtube.com/
 ### **Key features**
 
 - Game logic and globally accessible variables decoupled from the "block" blueprint, and moved to Player Controller, Game Mode, and Game Instance singletons
-
 - Hard-coded block configurations from the original tutorial replaced with structs
 - Moved from trigger boxes to a grid stored in a 1D array
 - Added a scoring system and audio/visual feedback for events and progression through the levels
 - Incorporated UMG Widgets for pause, options, and music, including gamepad controls with audio feedback
-- Added an audio manager based on Data Tables, allowing minimum inline references to assets
+- Added an audio manager based on Data Tables, minimising inline references to assets
 - Integrated a music system to mix between tracks
 
 ## Wwise Hierarchy
@@ -67,23 +67,25 @@ The current Windows version of the project uses the default 256 concurrent voice
 
 Priorities are set for consistency on the central rhythmic "falling" sound and game events. Minor details such as individually spatialised sounds for the destruction of blocks are set to low priority, and limited to ten simultaneous instances.
 
-## Memory and loading SoundBanks
+## Loading SoundBanks and Memory Management
 
-Auto-generated SoundBanks have been turned off, as these did not seem appropriate due to the size of potentially concurrently loaded clips in the interactive music hierarchy. 
+Auto-generated SoundBanks did not seem appropriate due to the size of concurrently loaded clips in the interactive music hierarchy. 
 
 At present, the player can switch tracks by pressing the track skip buttons found on the pause screen. 
+
 Initial tests with the profiler indicated that dynamically loading the music tracks reduced memory, but also produced performance issues including music and SFX dropouts. 
 
 As a temporary measure, the music SoundBanks are currently loaded into memory by default in this version, with memory use at around 200MB at runtime – fine for a proof of concept in a music-oriented game, but not acceptable for production.
 
 Since the player can enter the music at different level states, it is not possible just to stream the first section of the music; streaming all stems may cause further performance issues.
 
-I am currently working on a solution to load the music tracks dynamically. 
+I am currently working on loading the music tracks dynamically. 
 
 Potential solutions:
 
 - Streaming all stems by default (requires testing, not viable for mobile)
-- Streaming a lead-in clip on the transition **none->any** to allow time for the main tracks to bufferSeparating the first portion of each section into a shorter streamable segment
+- Streaming a lead-in clip on the transition **none->any** to allow time for the main tracks to buffer
+- Separating the first portion of each section into a shorter streamable segment
 - Loading or partially loading the "previous" and "next" Soundbanks when the player approaches the boundary (in this case, opening the music settings).
 
 Simplified music options may be necessary more generally for a future mobile version.
