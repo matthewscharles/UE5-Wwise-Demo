@@ -55,14 +55,28 @@ I started from a YouTube tutorial ([@BuildGamesWithJon](https://www.youtube.com/
 
 ## Wwise Hierarchy
 
-Although the game exists on a single map without world partitioning, different SoundBanks can be loaded by the player through the pause and option screens.
+Although the game exists on a single map without world partitioning, the different SoundBanks can be loaded explicitly by the player via the pause and option screens.
 <details>
-<summary>Show Wwise hierarchy screenshots</summary>
-[![Wwise Hierarchy: SoundBanks and Events](AD_4nXcrTr4ETEcWU3XRkanGW0rTZ0O9N60YWHch1-TUuWNz3XeQTUpVvJ9gNLNutKAH6pPV_CGeY1rtnCHoHUCTwdpmwlJqSkbLw5TeO5eGTA1qHutLv9wD-CDrOOOfSP0cTnwTLL1d9w.png)](AD_4nXcrTr4ETEcWU3XRkanGW0rTZ0O9N60YWHch1-TUuWNz3XeQTUpVvJ9gNLNutKAH6pPV_CGeY1rtnCHoHUCTwdpmwlJqSkbLw5TeO5eGTA1qHutLv9wD-CDrOOOfSP0cTnwTLL1d9w.png)
+  <summary>Wwise hierarchy screenshots (click to expand)</summary>
 
-[![Wwise Hierarchy: Bus Structure and Interactive Music Hierarchies](AD_4nXf1CTVFVuJTETv1ie_HKR0gFqGeifEJOZTabwlNezobXJLZ4Sx5FqwDT-NaKFMarKx3gs7yl-7Wsy-5Kb3lVVFoOA3zMF8UlriXv6ATG2OlmumpqfuAWDAMb1oQneMrJ5xuW0hKjw.png)](AD_4nXf1CTVFVuJTETv1ie_HKR0gFqGeifEJOZTabwlNezobXJLZ4Sx5FqwDT-NaKFMarKx3gs7yl-7Wsy-5Kb3lVVFoOA3zMF8UlriXv6ATG2OlmumpqfuAWDAMb1oQneMrJ5xuW0hKjw.png)
+  <p>
+    <a href="AD_4nXcrTr4ETEcWU3XRkanGW0rTZ0O9N60YWHch1-TUuWNz3XeQTUpVvJ9gNLNutKAH6pPV_CGeY1rtnCHoHUCTwdpmwlJqSkbLw5TeO5eGTA1qHutLv9wD-CDrOOOfSP0cTnwTLL1d9w.png">
+      <img src="AD_4nXcrTr4ETEcWU3XRkanGW0rTZ0O9N60YWHch1-TUuWNz3XeQTUpVvJ9gNLNutKAH6pPV_CGeY1rtnCHoHUCTwdpmwlJqSkbLw5TeO5eGTA1qHutLv9wD-CDrOOOfSP0cTnwTLL1d9w.png" alt="Wwise Hierarchy: SoundBanks and Events" style="max-width:100%; height:auto;">
+    </a>
+  </p>
 
-[![Wwise Hierarchy: Game Syncs and Actor-Mixer SFX Banks](AD_4nXd3Gg7YFmsZ3Ie_NN03VL1e2wTnbpy9J3sb7_MKB6SepaR2J1lhk-l3RCxXmBJEwLbrgpDYIyqBrdcpPu0WqdWdpC9Ezz_7FxQvDYDa_2mCm2DyDhW4yzQgt04GLhmg_v41LliG.png)](AD_4nXd3Gg7YFmsZ3Ie_NN03VL1e2wTnbpy9J3sb7_MKB6SepaR2J1lhk-l3RCxXmBJEwLbrgpDYIyqBrdcpPu0WqdWdpC9Ezz_7FxQvDYDa_2mCm2DyDhW4yzQgt04GLhmg_v41LliG.png)
+  <p>
+    <a href="AD_4nXf1CTVFVuJTETv1ie_HKR0gFqGeifEJOZTabwlNezobXJLZ4Sx5FqwDT-NaKFMarKx3gs7yl-7Wsy-5Kb3lVVFoOA3zMF8UlriXv6ATG2OlmumpqfuAWDAMb1oQneMrJ5xuW0hKjw.png">
+      <img src="AD_4nXf1CTVFVuJTETv1ie_HKR0gFqGeifEJOZTabwlNezobXJLZ4Sx5FqwDT-NaKFMarKx3gs7yl-7Wsy-5Kb3lVVFoOA3zMF8UlriXv6ATG2OlmumpqfuAWDAMb1oQneMrJ5xuW0hKjw.png" alt="Wwise Hierarchy: Bus Structure and Interactive Music Hierarchies" style="max-width:100%; height:auto;">
+    </a>
+  </p>
+
+  <p>
+    <a href="AD_4nXd3Gg7YFmsZ3Ie_NN03VL1e2wTnbpy9J3sb7_MKB6SepaR2J1lhk-l3RCxXmBJEwLbrgpDYIyqBrdcpPu0WqdWdpC9Ezz_7FxQvDYDa_2mCm2DyDhW4yzQgt04GLhmg_v41LliG.png">
+      <img src="AD_4nXd3Gg7YFmsZ3Ie_NN03VL1e2wTnbpy9J3sb7_MKB6SepaR2J1lhk-l3RCxXmBJEwLbrgpDYIyqBrdcpPu0WqdWdpC9Ezz_7FxQvDYDa_2mCm2DyDhW4yzQgt04GLhmg_v41LliG.png" alt="Wwise Hierarchy: Game Syncs and Actor-Mixer SFX Banks" style="max-width:100%; height:auto;">
+    </a>
+  </p>
+
 </details>
 
 The project currently uses the default 256 concurrent voices. 
