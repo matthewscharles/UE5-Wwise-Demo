@@ -105,53 +105,61 @@ I am currently working on loading the music tracks dynamically.
 
 ## Audio Manager
 
-Although Wwise events and UE Sounds can be called directly from Blueprints, a globally accessible audio manager reduces the number of places that an audio designer needs to work on, ultimately helping stability in debugging situations and overall scaleability.
+Although Wwise events and UE Sounds are typically called directly from Blueprints by default, this approach spreads asset references across the game. Although not always appropriate, a globally accessible audio manager reduces the number of places that an audio designer needs to work on, ultimately helping stability in debugging situations and overall scaleability.
 
-In this case, the audio manager is located in the game mode to remain accessible across UMAPs.  All events are stored in Data Tables to avoid hard-coding values, allowing events to be dropped directly into a soundbank preset table from the Wwise Browser. 
+In this case, the audio manager is located in the game mode to remain accessible across UMAPs.  All events are stored in Data Tables to avoid hard-coding values.  Instead, events are dropped directly into a SoundBank preset table from the Wwise Browser. 
 
 [![Data Tables for SFX banks](AD_4nXcYXXzHTCJsqRN2UEBxq-EUOEX7-Jz8euVOl5GKusuZV0OQHLmmHvFcL3OIL-F1Tb8y8lLMYJZ_wqNj5ee6f__ZAReReNkmF1rgzHEx_QXwymH48UxmXTN8BjoW5SELf-5aCX2jLQ.png)](AD_4nXcYXXzHTCJsqRN2UEBxq-EUOEX7-Jz8euVOl5GKusuZV0OQHLmmHvFcL3OIL-F1Tb8y8lLMYJZ_wqNj5ee6f__ZAReReNkmF1rgzHEx_QXwymH48UxmXTN8BjoW5SELf-5aCX2jLQ.png)
 
-The Game Mode exposes a *Trigger Sound* function, which determines what kind of event should be posted by cross-referencing values from the input parameters and information from the table entry.  This is similar to the standard Post Event and Set RTPC nodes, but means that the designer can change details such as which game syncs are being called without editing the game mechanic blueprints down the line.
-
-As well as providing a centralised source of assets, the Data Table approach also enables switching dynamically between Wwise and UE's built-in audio system.  Built-in UE sources can be summed through a Wwise mix bus using [Audio Link](https://www.audiokinetic.com/en/blog/how-to-use-audiolink/), as implemented in this demo: [Sink the Drum Machine](https://www.youtube.com/watch?v=JACIFoUdL-o).
+The Game Mode exposes a *Trigger Sound* function, which determines what kind of event should be posted by cross-referencing values from the input parameters and information from the table entry.  This is similar to the standard Post Event and Set RTPC nodes, but enables a designer to change details such as which game syncs are being called without returning to the game mechanics or level Blueprints.
 
 [![Blueprint function: Trigger Sound](AD_4nXdSEnypKbounsnGQVbj3Hrb_5V2y2OUa2wyP2pWU823MJ443HkM8bWcH6b8wTJig_JYqTkeqZ4utdmXvwdt8wPqQ7aCt3T-0iTYo8mT8gMfqyQt2d0aH7dcDNuilkHEAbnJyo8b_w.png)](AD_4nXdSEnypKbounsnGQVbj3Hrb_5V2y2OUa2wyP2pWU823MJ443HkM8bWcH6b8wTJig_JYqTkeqZ4utdmXvwdt8wPqQ7aCt3T-0iTYo8mT8gMfqyQt2d0aH7dcDNuilkHEAbnJyo8b_w.png)
 
 [Trigger Sound on BlueprintUE.com](https://blueprintue.com/blueprint/j7hemlh-/)
 
-The following Blueprint functions show example calls to *Trigger Sound*, with and without spatialisation:
+Although it is unusual to use both Wwise and the built-in UE audio in a single project, this provides a useful example of how a single function can be deployed and edited centrally as the needs of the game evolve.
+
+The following Blueprint functions show example calls to *Trigger Sound*:
 
 [![Blueprint function: Pause Game](AD_4nXcUx5bob9YT7W1ZLfdNpAUkSAP86cE09AFK1y_gnBJSuqN0W57iXhG40HqCWmt6Jby7ZSR8plTH_e7yC3fAyEnkRV0NsT49keKBAlC95k3OPuaR8jntXbERBo5wFHtFCJDB92bv.png)](AD_4nXcUx5bob9YT7W1ZLfdNpAUkSAP86cE09AFK1y_gnBJSuqN0W57iXhG40HqCWmt6Jby7ZSR8plTH_e7yC3fAyEnkRV0NsT49keKBAlC95k3OPuaR8jntXbERBo5wFHtFCJDB92bv.png)
 
 [![Blueprint function: Update Block Position](AD_4nXdCfX7vLwvFqf2Rj7keYKjyXd89nd80A0nkQKbK-OGmgATGr9Qdol_g7dLwn-evHDAxq0v0Nx8LR0v_0EuHeOR1DakI7HBam0iNHt3eiHhoL6KOZ6g6Z5qNTXjxtwGazaxZ8sxG3w.png)](AD_4nXdCfX7vLwvFqf2Rj7keYKjyXd89nd80A0nkQKbK-OGmgATGr9Qdol_g7dLwn-evHDAxq0v0Nx8LR0v_0EuHeOR1DakI7HBam0iNHt3eiHhoL6KOZ6g6Z5qNTXjxtwGazaxZ8sxG3w.png)
 
-A higher level Data Table facilitates switching between the respective SoundBanks and Data Tables. The following Blueprint function appears to work, subject to further testing (**Auto Load** should be set to **Off** for each file in the UE5\Content\WwiseAudio folder). 
+A higher level Data Table facilitates switching between the respective SoundBanks and Data Tables. The following Blueprint function appears to work, subject to further testing (*Auto Load* should be set to **Off** for each file in *UE5\Content\WwiseAudio*). 
 
 [![Blueprint function: Set SFX Bank](AD_4nXeNMnoRLkXQriMv_43d_ig5l2NzWDzoIbT43_BtbAwe7JQewoRQQfI4UvAAlpgWxW4Lj_MfWI7yK_UdNj0fw4XAmK7GyOViOC5WexwFLGkZPnWEol1Y_93wX_hIvhMgAWg-9eGl_Q.png)](AD_4nXeNMnoRLkXQriMv_43d_ig5l2NzWDzoIbT43_BtbAwe7JQewoRQQfI4UvAAlpgWxW4Lj_MfWI7yK_UdNj0fw4XAmK7GyOViOC5WexwFLGkZPnWEol1Y_93wX_hIvhMgAWg-9eGl_Q.png)
 
 At present, a new Data Table should be generated for each SoundBank, but this should be possible to automate with WAAPI scripting.
 
+As well as providing a centralised container for assets, this Data Table-based approach also enables switching dynamically between Wwise and UE's built-in audio system while keeping the main Blueprints uncluttered.  
+
+The built-in UE sources can be summed through a Wwise mix bus using [Audio Link](https://www.audiokinetic.com/en/blog/how-to-use-audiolink/), as implemented in this demo: [Sink the Drum Machine](https://www.youtube.com/watch?v=JACIFoUdL-o).
+
 ## Mix
 
-The top level bus hierarchy in Wwise is matched by Sound Submixes in native UE, creating Music, Ambience, and SFX channels for a user-modifiable mix from the options screen.
+The top level bus hierarchy in Wwise is matched by Sound Submixes in native UE, creating *Music*, *Ambience*, and *SFX* channels for a user-modifiable mix from the options screen.
 
-UMG slider widgets post RTPCs to Wwise alongside modulation parameters for the native buses. Music tracks are stored as Wwise "start" and "stop" events in a data table, and can be retrieved by index or track title. 
+UMG slider widgets post RTPCs to Wwise alongside modulation parameters for the native buses. Music tracks are stored as Wwise "start" and "stop" events in a Data Table, and can be retrieved by index or track title. 
 
 Since all music is currently handled by Wwise, the *Play Music Track* function simply checks if the entry is present and posts a play/stop event. The function should also be updated to load data for each asset as in *Set SFX Bank*.
 
 [![Blueprint function: Play Music Track](AD_4nXfCmreMpai9DfZuHySUai1Q0VlFlewZ65tl_DyvKzer8mbMUCqPvTkXIHdIE2N6t3lq61Rcia4nyZd0VqLfn8F6rv0l_vsOHWaZAwHgAjeZxXOLC8tP7xxau_fb6gREzLpLrCQt4w.png)](AD_4nXfCmreMpai9DfZuHySUai1Q0VlFlewZ65tl_DyvKzer8mbMUCqPvTkXIHdIE2N6t3lq61Rcia4nyZd0VqLfn8F6rv0l_vsOHWaZAwHgAjeZxXOLC8tP7xxau_fb6gREzLpLrCQt4w.png)
 
-Each adaptive music track lives on a Music Switch, with sections assigned to gameplay levels. Sections vary from 8 - 32 bars, meaning that the player can level-up multiple times before the boundary of a musical section.
+A basic ambience track is also generated by overlapping loops on a Music Switch. The *Ambience* control affects the volume of this track alongside a reverb return bus.
 
-In order to create transitions between longer loops, multiple Wwise States are set simultaneously, each configured with individual quantization points and fade times at the levels of Audio Bus, Switch Group, and Music Segment. As a result, a long pre-entry section can also be used to trigger a "dub" section based on level switches on the material currently being played.
+## Music Switches for Levels
+
+Each adaptive music track lives on a Wwise Music Switch, with sections assigned to gameplay levels. Sections vary from 8 - 32 bars, meaning that the player can level-up multiple times before the boundary of a musical section.
+
+In order to create transitions between longer loops, multiple Wwise States are set simultaneously.  Each state group is configured with individual quantization points and fade times for Audio Bus, Switch Group, and Music Segment. 
+
+As a result, a long pre-entry section can also be used to trigger a "dub" section based on level switches on the material currently being played.
 
 To handle this potentially complex setup in UE, arrays of Wwise States are stored as Data Tables so that parallel events can be added and called without modifying the Blueprints. 
 
 [![Blueprint function: set Wwise States from Data Tables](AD_4nXfefOyANW9CQz8kHBMgbBBMpghMu7IK9a6FFS7cWjq-WHZIhURkO4a06UyHqemh_Mhwmtsf6EK2BWtUAEWGRzljQf7MduOHAMiJKKgv9cRvjo2LmKmEB21gb1i56_kd3tG4nWqDoQ.png)](AD_4nXfefOyANW9CQz8kHBMgbBBMpghMu7IK9a6FFS7cWjq-WHZIhURkO4a06UyHqemh_Mhwmtsf6EK2BWtUAEWGRzljQf7MduOHAMiJKKgv9cRvjo2LmKmEB21gb1i56_kd3tG4nWqDoQ.png)
 
 This setup offers potential for selectively triggering layers – for example, enabling simplified transitions by only triggering the events associated with the main music switch.
-
-A basic ambience track is also generated by overlapping loops on a Music Switch. The ambience control affects the volume of this track alongside a reverb return bus.
 
 ## Conclusion
 
@@ -162,7 +170,7 @@ After testing, storage of assets in Data Tables does not appear to affect the So
 ### Next steps
 
 - **Test and confirm dynamic Soundbank loading**  
-  - Test on Mac  
+  - Test on other platforms including Mac  
   - Identify further cooking prep  
   - Test the current bank-loading solution on the interactive music hierarchy  
   - Expand the number of interactive music tracks to emulate a larger scale game  
