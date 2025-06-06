@@ -2,6 +2,19 @@
 
 [matthewscharles.github.io](http://matthewscharles.github.io/)
 
+## Table of Contents
+
+- [Introduction](#introduction)
+  - [Demo Video](#demo-video)
+- [Overview](#overview)
+  - [Key features](#key-features)
+- [Wwise Hierarchy](#wwise-hierarchy)
+- [Memory and loading SoundBanks](#memory-and-loading-soundbanks)
+- [Audio Manager Blueprint](#audio-manager-blueprint)
+- [Mix](#mix)
+- [Conclusion](#conclusion)
+  - [Next steps](#next-steps)
+
 ## Introduction
 
 This is a draft for a dev log video / post describing audio implementation and Blueprint functionality for a project created in [Unreal Engine](https://www.unrealengine.com/) and [Wwise](https://www.audiokinetic.com/).
@@ -31,14 +44,14 @@ I started from a YouTube tutorial ([@BuildGamesWithJon](https://www.youtube.com/
 
 ### **Key features**
 
-- Game logic and globally accessible variables decoupled from the "block" blueprint, and moved to the Player Controller, Game Mode, and Game Instance singletons
+- Game logic and globally accessible variables decoupled from the "block" blueprint, and moved to Player Controller, Game Mode, and Game Instance singletons
 
-- Hard-coded block configurations and colours replaced with structs
+- Hard-coded block configurations from the original tutorial replaced with structs
 - Moved from trigger boxes to a grid stored in a 1D array
 - Added a scoring system and audio/visual feedback for events and progression through the levels
-- Incorporated Widgets for pause, options, and music, including gamepad controls with audio feedback
+- Incorporated UMG Widgets for pause, options, and music, including gamepad controls with audio feedback
 - Added an audio manager based on Data Tables, allowing minimum inline references to assets
-- Integrated a music system to mix between tracks – currently four simultaneous stems
+- Integrated a music system to mix between tracks
 
 ## Wwise Hierarchy
 
