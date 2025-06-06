@@ -108,11 +108,15 @@ The following Blueprint functions show example calls to *Trigger Sound*:
 
 [![Blueprint function: Update Block Position](AD_4nXdCfX7vLwvFqf2Rj7keYKjyXd89nd80A0nkQKbK-OGmgATGr9Qdol_g7dLwn-evHDAxq0v0Nx8LR0v_0EuHeOR1DakI7HBam0iNHt3eiHhoL6KOZ6g6Z5qNTXjxtwGazaxZ8sxG3w.png)](AD_4nXdCfX7vLwvFqf2Rj7keYKjyXd89nd80A0nkQKbK-OGmgATGr9Qdol_g7dLwn-evHDAxq0v0Nx8LR0v_0EuHeOR1DakI7HBam0iNHt3eiHhoL6KOZ6g6Z5qNTXjxtwGazaxZ8sxG3w.png)
 
-A higher level Data Table facilitates switching between the respective SoundBanks and Data Tables. The following Blueprint function appears to work, subject to further testing (*Auto Load* should be set to **Off** for each file in *UE5\Content\WwiseAudio*). 
+
+
+At present, a new Data Table should be generated for each SoundBank, but this should be possible to automate with WAAPI scripting.
+
+A higher level Data Table facilitates switching between the respective SoundBanks and Data Tables. The following Blueprint function is a first attempt at ensuring dynamic switching, subject to further testing (n.b. *Auto Load* should be set to **Off** for the corresponding assets in *UE5\Content\WwiseAudio*). 
 
 [![Blueprint function: Set SFX Bank](AD_4nXeNMnoRLkXQriMv_43d_ig5l2NzWDzoIbT43_BtbAwe7JQewoRQQfI4UvAAlpgWxW4Lj_MfWI7yK_UdNj0fw4XAmK7GyOViOC5WexwFLGkZPnWEol1Y_93wX_hIvhMgAWg-9eGl_Q.png)](AD_4nXeNMnoRLkXQriMv_43d_ig5l2NzWDzoIbT43_BtbAwe7JQewoRQQfI4UvAAlpgWxW4Lj_MfWI7yK_UdNj0fw4XAmK7GyOViOC5WexwFLGkZPnWEol1Y_93wX_hIvhMgAWg-9eGl_Q.png)
 
-At present, a new Data Table should be generated for each SoundBank, but this should be possible to automate with WAAPI scripting.
+
 
 As well as providing a centralised container for assets, this Data Table-based approach also enables switching dynamically between Wwise and UE's built-in audio system while keeping the main Blueprints uncluttered.  
 
