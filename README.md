@@ -42,8 +42,8 @@ Having cloned an existing game to work through the structure, the next iteration
 
 ### Starting point
 
-At this point, all blueprints and assets from the original tutorial have been replaced. 
 I began with a YouTube tutorial by [@BuildGamesWithJon](https://www.youtube.com/watch?v=54L7Un47Pbs), using it as a starting point before applying significant modifications. My focus was on improving separation of concerns and shifting toward a more data-driven architecture.
+
 At this stage, all Blueprints and assets from the original tutorial have been replaced with custom implementations.
 
 ### **Key features**
