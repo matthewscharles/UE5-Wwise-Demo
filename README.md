@@ -18,9 +18,9 @@
 
 ## Introduction
 
-This is a draft for a dev log video / post describing audio implementation and Blueprint functionality for a project created in [Unreal Engine](https://www.unrealengine.com/) and [Wwise](https://www.audiokinetic.com/).
+This devlog describes audio implementation and Blueprint functionality for a project created in [Unreal Engine](https://www.unrealengine.com/) and [Wwise](https://www.audiokinetic.com/).  While the focus is on audio, the aim is also to develop and demonstrate general skills within the engine.
 
-The project features an unofficial, non-commercial clone of Tetris, created solely for educational and demonstration purposes. It is intended as a vehicle for showcasing interactive audio implementation techniques and does not replicate or redistribute original assets, code, or proprietary content from the original game.
+The project in question features an unofficial, non-commercial clone of Tetris, created solely for educational and demonstration purposes. It is intended as a vehicle for showcasing interactive audio implementation techniques and does not replicate or redistribute original assets, code, or proprietary content from the original game.
 
 All trademarks and copyrights remain the property of their respective owners. If you are a rights holder and believe this content infringes on your intellectual property, please contact me and it will be promptly removed.
 
@@ -32,25 +32,28 @@ The following video shows gameplay with YouTube timestamps for musical levels an
 
 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;"><iframe src="https://www.youtube.com/embed/Cw2E2UDpvCo" style="position: absolute; top:0; left: 0; width: 100%; height: 100%;" frameborder="0" allowfullscreen></iframe></div>
 
-
 Please see the inline screenshots for Blueprint examples (click for full-size images).
 
 ## Overview
 
-The idea was to create a game that would be playable from start to finish, with some clear parameters for progression and tension as a vehicle for sound effects and interactive music. A puzzle game felt like the best option for something self contained, and also provided the opportunity to explore mechanics outside the usual 3D oriented worlds I have worked on in previous projects and demos.
+The goal was to create a game that would be playable from start to finish, with some clear parameters for progression and tension as a vehicle for sound effects and interactive music. A puzzle game felt like the best option for something self contained, and also provided the opportunity to explore mechanics outside the usual 3D character-based projects that I have worked on in previous demos.
 
-Having cloned an existing game to work through the structure, the next iteration should be a playable standalone with original logic suitable for upload on itch.io. 
+Having cloned an existing game to work through the structure, the next iteration should be a playable standalone with original logic, suitable for upload on itch.io. 
 
-I started from a YouTube tutorial ([@BuildGamesWithJon](https://www.youtube.com/watch?v=54L7Un47Pbs)) and immediately applied some heavy modifications; at this point, all original blueprints have now been replaced. 
+### Starting point
+
+At this point, all blueprints and assets from the original tutorial have been replaced. 
+I began with a YouTube tutorial by [@BuildGamesWithJon](https://www.youtube.com/watch?v=54L7Un47Pbs), using it as a starting point before applying significant modifications. My focus was on improving separation of concerns and shifting toward a more data-driven architecture.
+At this stage, all Blueprints and assets from the original tutorial have been replaced with custom implementations.
 
 ### **Key features**
 
-- Game logic and globally accessible variables decoupled from the "block" blueprint, and moved to Player Controller, Game Mode, and Game Instance singletons
+- Game logic and  variables decoupled from the "block" blueprint, and moved to common singletons: Player Controller, Game Mode, and Game Instance.
 - Hard-coded block configurations from the original tutorial replaced with structs
 - Moved from trigger boxes to a grid stored in a 1D array
 - Added a scoring system and audio/visual feedback for events and progression through the levels
 - Incorporated UMG Widgets for pause, options, and music, including gamepad controls with audio feedback
-- Added an audio manager based on Data Tables, minimising inline references to assets
+- Added an audio manager based on [Data Tables](https://dev.epicgames.com/community/learning/tutorials/Gp9j/working-with-data-in-unreal-engine-data-tables-data-assets-uproperty-specifiers-and-more), minimising inline references to assets
 - Integrated a music system to mix between tracks
 
 ## Wwise Hierarchy
@@ -83,17 +86,13 @@ The project currently uses the default 256 concurrent voices.
 
 Priorities are set for consistency on the central rhythmic "falling" sound and game events. Minor details such as individually spatialised sounds for the destruction of blocks are set to low priority, and limited to ten simultaneous instances.
 
-## Loading SoundBanks and Memory Management
+## SoundBanks and Memory Management
 
-Auto-generated SoundBanks did not seem appropriate due to the size of concurrently loaded clips in the interactive music hierarchy. 
+The player can switch tracks by pressing the track skip buttons found on the pause screen; the music will enter at the current level state. 
 
-At present, the player can switch tracks by pressing the track skip buttons found on the pause screen. 
+Auto-generated SoundBanks are not appropriate due to the size of concurrently loaded clips in the interactive music hierarchy. Initial tests with the profiler indicated that dynamically loading the music tracks reduced memory, but also produced performance issues including music and SFX dropouts. 
 
-Initial tests with the profiler indicated that dynamically loading the music tracks reduced memory, but also produced performance issues including music and SFX dropouts. 
-
-As a temporary measure, the music SoundBanks are currently loaded into memory by default in this version, with memory use at around 200MB at runtime – fine for a proof of concept in a music-oriented game, but not acceptable for production.
-
-Since the player can enter the music at different level states, it is not possible just to stream the first section of the music; streaming all stems may cause further performance issues.
+As a temporary measure, the music SoundBanks are currently loaded into memory by default, with memory use at around 200MB at runtime. This is fine for a proof of concept in a music-oriented game, but would generally not be acceptable for production.
 
 I am currently working on loading the music tracks dynamically. 
 
@@ -104,11 +103,11 @@ I am currently working on loading the music tracks dynamically.
 - Separating the first portion of each section into a shorter streamable segment
 - Loading or partially loading the "previous" and "next" Soundbanks when the player approaches the boundary (in this case, opening the music settings).
 
-Simplified music options may be necessary more generally for a future mobile version.
+Simplified music options may be necessary for a future mobile version.
 
 ## Audio Manager Blueprint
 
-The audio manager is temporarily located in the game mode to remain accessible across UMAPs, but should be moved to the game instance or game state.
+The audio manager is temporarily located in the game mode to remain accessible across UMAPs.
 
 All events are stored in Data Tables to avoid hard-coding values, allowing events to be dropped directly into a soundbank preset table from the Wwise Browser. At present, a new Data Table should be generated for each SoundBank – this should be possible to automate with scripting via the WAAPI.
 
