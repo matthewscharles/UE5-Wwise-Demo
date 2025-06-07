@@ -9,8 +9,8 @@
   - [Key features](#key-features)
 
 - [Wwise Hierarchy](#wwise-hierarchy)
-- [SoundBanks and Memory Management](#memory-and-loading-soundbanks)
-- [Audio Manager Blueprint](#audio-manager-blueprint)
+- [SoundBanks and Memory Management](#soundbanks-and-memory-management)
+- [Audio Manager](#audio-manager)
 - [Mix](#mix)
 
 - [Conclusion](#conclusion)
@@ -50,11 +50,11 @@ At this stage, all Blueprints and assets from the original tutorial have been re
 
 - Game logic and  variables decoupled from the "block" blueprint, and moved to common singletons: Player Controller, Game Mode, and Game Instance.
 - Hard-coded block configurations from the original tutorial replaced with structs
-- Moved from trigger boxes to a grid stored in a 1D array
+- Moved from trigger boxes to a more conventional grid stored in a 1D array
 - Added a scoring system and audio/visual feedback for events and progression through the levels
 - Incorporated UMG Widgets for pause, options, and music, including gamepad controls with audio feedback
-- Added an audio manager based on [Data Tables](https://dev.epicgames.com/community/learning/tutorials/Gp9j/working-with-data-in-unreal-engine-data-tables-data-assets-uproperty-specifiers-and-more), minimising inline references to assets
 - Integrated a music system to mix between tracks
+- Added an audio manager based on [Data Tables](https://dev.epicgames.com/community/learning/tutorials/Gp9j/working-with-data-in-unreal-engine-data-tables-data-assets-uproperty-specifiers-and-more), minimising inline references to assets
 
 ## Wwise Hierarchy
 
@@ -88,29 +88,45 @@ Priorities are set for consistency on the central rhythmic "falling" sound and g
 
 ## Audio Manager
 
-Although Wwise events and UE Sounds are typically called directly from Blueprints by default, this approach spreads asset references across the game. Although not always appropriate, a globally accessible audio manager reduces the number of places that an audio designer needs to work on, ultimately helping stability in debugging situations and overall scaleability.
+Wwise Events and UE Sounds are typically triggered directly from Blueprints, which can result in asset references being distributed throughout the game logic. While this direct referencing approach is often sufficient, it can become harder to maintain at scale.
 
-In this case, the audio manager is located in the game mode to remain accessible across UMAPs.  All events are stored in Data Tables to avoid hard-coding values.  Instead, events are dropped directly into a SoundBank preset table from the Wwise Browser. 
+A globally accessible audio manager helps consolidate audio logic and control, reducing the number of Blueprints an audio designer needs to interact with. This centralization improves debugging stability and supports more scalable workflows.
+
+While an audio manager is typically implemented as a singleton — for example, via a GameInstanceSubsystem or dedicated manager class — this prototype uses Blueprint-callable functions on the Game Mode to achieve global access across UMAPs.
+
+All Wwise Events are stored in Data Tables to avoid hard-coded references in Blueprints. Instead of embedding asset references directly, events are organized in a centralized SoundBank preset table. These are dropped in directly from the Wwise Browser, as shown below:
 
 [![Data Tables for SFX banks](AD_4nXcYXXzHTCJsqRN2UEBxq-EUOEX7-Jz8euVOl5GKusuZV0OQHLmmHvFcL3OIL-F1Tb8y8lLMYJZ_wqNj5ee6f__ZAReReNkmF1rgzHEx_QXwymH48UxmXTN8BjoW5SELf-5aCX2jLQ.png)](AD_4nXcYXXzHTCJsqRN2UEBxq-EUOEX7-Jz8euVOl5GKusuZV0OQHLmmHvFcL3OIL-F1Tb8y8lLMYJZ_wqNj5ee6f__ZAReReNkmF1rgzHEx_QXwymH48UxmXTN8BjoW5SELf-5aCX2jLQ.png)
 
-The Game Mode exposes a *Trigger Sound* function, which determines what kind of event should be posted by cross-referencing values from the input parameters and information from the table entry.  This is similar to the standard Post Event and Set RTPC nodes, but enables a designer to change details such as which game syncs are being called without returning to the game mechanics or level Blueprints.
+### Accessing Data Tables: *Trigger Sound*
+
+The Game Mode exposes a *Trigger Sound* function, which determines what kind of event should be posted by cross-referencing values from the input parameters and information from the table entry.  
+
+In Wwise terms, this is similar to the standard *Post Event* and *Set RTPC* nodes, but with added flexibility for layering game syncs that may be attached to an actor.  
+
+Posting a sound using the built-in UE *MetaSounds* can be more complex, involving presets, initial parameters, and in some cases requiring interaction with the Builder API. 
 
 [![Blueprint function: Trigger Sound](AD_4nXdSEnypKbounsnGQVbj3Hrb_5V2y2OUa2wyP2pWU823MJ443HkM8bWcH6b8wTJig_JYqTkeqZ4utdmXvwdt8wPqQ7aCt3T-0iTYo8mT8gMfqyQt2d0aH7dcDNuilkHEAbnJyo8b_w.png)](AD_4nXdSEnypKbounsnGQVbj3Hrb_5V2y2OUa2wyP2pWU823MJ443HkM8bWcH6b8wTJig_JYqTkeqZ4utdmXvwdt8wPqQ7aCt3T-0iTYo8mT8gMfqyQt2d0aH7dcDNuilkHEAbnJyo8b_w.png)
 
-[Trigger Sound on BlueprintUE.com](https://blueprintue.com/blueprint/j7hemlh-/)
+- [Trigger Sound on BlueprintUE.com](https://blueprintue.com/blueprint/j7hemlh-/)
 
-Although it is unusual to use both Wwise and the built-in UE audio in a single project, this provides a useful example of how a single function can be deployed and edited centrally as the needs of the game evolve.
+In this prototype, *Trigger Sound* takes a *success* bool (e.g. whether a rotation or move was successful), and a generic float called *value*.  These values are combined to generate a single RTPC value that can be sent alongside the event.
 
-The following Blueprint functions show example calls to *Trigger Sound*:
+A better approach might be to pass a custom structure to the *Trigger Sound* function, allowing the designers to include a flexible list of parameters at either end.
+
+The following Blueprint functions show example *Trigger Sound* calls:
 
 [![Blueprint function: Pause Game](AD_4nXcUx5bob9YT7W1ZLfdNpAUkSAP86cE09AFK1y_gnBJSuqN0W57iXhG40HqCWmt6Jby7ZSR8plTH_e7yC3fAyEnkRV0NsT49keKBAlC95k3OPuaR8jntXbERBo5wFHtFCJDB92bv.png)](AD_4nXcUx5bob9YT7W1ZLfdNpAUkSAP86cE09AFK1y_gnBJSuqN0W57iXhG40HqCWmt6Jby7ZSR8plTH_e7yC3fAyEnkRV0NsT49keKBAlC95k3OPuaR8jntXbERBo5wFHtFCJDB92bv.png)
 
 [![Blueprint function: Update Block Position](AD_4nXdCfX7vLwvFqf2Rj7keYKjyXd89nd80A0nkQKbK-OGmgATGr9Qdol_g7dLwn-evHDAxq0v0Nx8LR0v_0EuHeOR1DakI7HBam0iNHt3eiHhoL6KOZ6g6Z5qNTXjxtwGazaxZ8sxG3w.png)](AD_4nXdCfX7vLwvFqf2Rj7keYKjyXd89nd80A0nkQKbK-OGmgATGr9Qdol_g7dLwn-evHDAxq0v0Nx8LR0v_0EuHeOR1DakI7HBam0iNHt3eiHhoL6KOZ6g6Z5qNTXjxtwGazaxZ8sxG3w.png)
 
+Although it is unusual to use both Wwise and the built-in UE audio in a single project, this provides an example of how a single function can be deployed and edited centrally as the needs of the game evolve. 
 
+For example, if built into the design early on, the audio manager could provide a way to migrate a project from Wwise to built-in audio and vice versa.
 
-At present, a new Data Table should be generated for each SoundBank, but this should be possible to automate with WAAPI scripting.
+### Switching SoundBanks
+
+In this version, a new Data Table should be generated manually to accompany each alternative SFX SoundBank, which essentially means duplicating assignments in Wwise. Although this would not be practical at a larger scale, it should be possible to automate the Data Table generation with WAAPI scripting.
 
 A higher level Data Table facilitates switching between the respective SoundBanks and Data Tables. The following Blueprint function is a first attempt at ensuring dynamic switching, subject to further testing (n.b. *Auto Load* should be set to **Off** for the corresponding assets in *UE5\Content\WwiseAudio*). 
 
@@ -167,9 +183,7 @@ I am currently working on loading the music tracks dynamically.
 
 ## Conclusion
 
-The project cooks and builds successfully in Windows. 
-
-After testing, storage of assets in Data Tables does not appear to affect the SoundBank loading situation, so it seems to be a practical design pattern / architecture.
+The project cooks and builds successfully in Windows. The Data Table approach tests well so far, so it appears to be worth pursuing.
 
 ### Next steps
 
@@ -179,13 +193,15 @@ After testing, storage of assets in Data Tables does not appear to affect the So
   - Test the current bank-loading solution on the interactive music hierarchy  
   - Expand the number of interactive music tracks to emulate a larger scale game  
 - **Refactor and optimise the UE5 project:**   
-  - Move the logic from the Game Mode to help allow for a future multiplayer version  
+  - Move logic from the Game Mode to help allow for a future multiplayer version  
   - Move globally accessible variables from the Game Mode and Instance to the Game State 
+  - Create a dedicated Audio Manager singleton rather than using the Game Mode
+  - Determine a more flexible input for the *Trigger Sound* function, e.g. passing a struc.
   - Add Wwise callbacks for visual feedback from the music transitions  
-  - Swap remaining hardcoded structs for Data Tables and Data Assets  
-  - Validate assets where appropriate  
+  - Swap any remaining hard-coded structs for Data Tables and Data Assets  
+  - Ensure assets are validated where appropriate  
 - **Refine and optimise the Wwise project:**   
-  - Move from RTPCs to switches where possible  
+  - Move from RTPCs to switches where appropriate  
   - Establish consistent naming conventions  
   - Add custom cues for callbacks to the Blueprint  
   - Add static music options for low-power platforms / mobile  
