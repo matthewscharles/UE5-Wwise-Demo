@@ -18,9 +18,9 @@
 
 ## Introduction
 
-This devlog describes audio implementation and Blueprint functionality for a project created in [Unreal Engine](https://www.unrealengine.com/) and [Wwise](https://www.audiokinetic.com/).  While the focus is on audio, the aim is also to develop and demonstrate general skills within the engine.
+This devlog describes audio implementation and Blueprint functionality for a project created in [Unreal Engine](https://www.unrealengine.com/) and [Wwise](https://www.audiokinetic.com/).  While the focus is on audio, the aim is also to develope and demonstrate general skills within the engine by taking a standalone game from a playable prototype to a successful build process.
 
-The project in question features an unofficial, non-commercial clone of Tetris, created solely for educational and demonstration purposes. It is intended as a vehicle for showcasing interactive audio implementation techniques and does not replicate or redistribute original assets, code, or proprietary content from the original game.
+The project in question features an unofficial, non-commercial clone of Tetris, created solely for educational and demonstration purposes. It is intended as a vehicle for showcasing interactive audio implementation techniques and does not replicate or redistribute original assets, code, or proprietary content from the original game. The project's GitHub repo does not currently contain code.
 
 All trademarks and copyrights remain the property of their respective owners. If you are a rights holder and believe this content infringes on your intellectual property, please contact me and it will be promptly removed.
 
@@ -42,7 +42,7 @@ Having cloned an existing game to work through the structure, the next iteration
 
 ### Starting point
 
-I began with a YouTube tutorial by [@BuildGamesWithJon](https://www.youtube.com/watch?v=54L7Un47Pbs), using it as a starting point before applying significant modifications. My focus was on improving separation of concerns and shifting toward a more data-driven architecture.
+I began with a YouTube tutorial by [@BuildGamesWithJon](https://www.youtube.com/watch?v=54L7Un47Pbs), using it as a starting point before applying significant modifications.  In particular, I felt that the original project would benefit from improved separation of concerns and a shift toward a more data-driven architecture.
 
 At this stage, all Blueprints and assets from the original tutorial have been replaced with custom implementations.
 
@@ -94,7 +94,7 @@ A globally accessible audio manager helps consolidate audio logic and control, r
 
 While an audio manager is typically implemented as a singleton — for example, via a GameInstanceSubsystem or dedicated manager class — this prototype uses Blueprint-callable functions on the Game Mode to achieve global access across UMAPs.
 
-All Wwise Events are stored in Data Tables to avoid hard-coded references in Blueprints. Instead of embedding asset references directly, events are organized in a centralized SoundBank preset table. These are dropped in directly from the Wwise Browser, as shown below:
+All Wwise Events are stored in Data Tables to avoid hard-coded references in Blueprints. Instead of embedding asset references directly, events are organized in a centralized SoundBank preset table. These can be dropped in directly from the Wwise Browser, as shown below:
 
 [![Data Tables for SFX banks](AD_4nXcYXXzHTCJsqRN2UEBxq-EUOEX7-Jz8euVOl5GKusuZV0OQHLmmHvFcL3OIL-F1Tb8y8lLMYJZ_wqNj5ee6f__ZAReReNkmF1rgzHEx_QXwymH48UxmXTN8BjoW5SELf-5aCX2jLQ.png)](AD_4nXcYXXzHTCJsqRN2UEBxq-EUOEX7-Jz8euVOl5GKusuZV0OQHLmmHvFcL3OIL-F1Tb8y8lLMYJZ_wqNj5ee6f__ZAReReNkmF1rgzHEx_QXwymH48UxmXTN8BjoW5SELf-5aCX2jLQ.png)
 
@@ -108,11 +108,16 @@ Posting a sound using the built-in UE *MetaSounds* can be more complex, involvin
 
 [![Blueprint function: Trigger Sound](AD_4nXdSEnypKbounsnGQVbj3Hrb_5V2y2OUa2wyP2pWU823MJ443HkM8bWcH6b8wTJig_JYqTkeqZ4utdmXvwdt8wPqQ7aCt3T-0iTYo8mT8gMfqyQt2d0aH7dcDNuilkHEAbnJyo8b_w.png)](AD_4nXdSEnypKbounsnGQVbj3Hrb_5V2y2OUa2wyP2pWU823MJ443HkM8bWcH6b8wTJig_JYqTkeqZ4utdmXvwdt8wPqQ7aCt3T-0iTYo8mT8gMfqyQt2d0aH7dcDNuilkHEAbnJyo8b_w.png)
 
-- [Trigger Sound on BlueprintUE.com](https://blueprintue.com/blueprint/j7hemlh-/)
+<!-- - [Trigger Sound on BlueprintUE.com](https://blueprintue.com/blueprint/j7hemlh-/) -->
 
-In this prototype, *Trigger Sound* takes a *success* bool (e.g. whether a rotation or move was successful), and a generic float called *value*.  These values are combined to generate a single RTPC value that can be sent alongside the event.
+In this prototype, *Trigger Sound* takes two key parameters: 
 
-A better approach might be to pass a custom structure to the *Trigger Sound* function, allowing the designers to include a flexible list of parameters at either end.
+- *success* (bool): indicating whether a rotation or move was successful
+- *value* (float): a generic value which can be used to indicate relevant information such as the progress of a falling block 
+
+The *success* bool is converted to a float, and the resulting values are added to generate a single RTPC value that can be sent alongside the event.  This facilitates a simple mapping in Wwise which can influence pitch and other parameters to create the desired variations.
+
+In reality, a larger variety of parameters are likely to be sent to Wwise.  A better approach might be to pass a custom structure to the *Trigger Sound* function, allowing the designers to include a flexible list of parameters at either end.
 
 The following Blueprint functions show example *Trigger Sound* calls:
 
